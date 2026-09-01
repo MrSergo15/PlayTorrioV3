@@ -120,6 +120,10 @@ dependency_overrides:
     git:
       url: https://github.com/Predidit/media-kit.git
       path: ./libs/ohos/media_kit_libs_ohos
+  torrserver_flutter:
+    git:
+      url: https://github.com/MrSergo15/torrserver_flutter.git
+      ref: linux-macos-torrserver-fix
 
 flutter_launcher_icons:
   android: true
