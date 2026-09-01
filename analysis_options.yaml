@@ -16,6 +16,13 @@ analyzer:
     unnecessary_underscores: ignore
     dangling_library_doc_comments: ignore
     use_null_aware_elements: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   rules:
