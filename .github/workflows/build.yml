@@ -161,6 +161,13 @@ jobs:
       - name: Build Linux Release
         run: flutter build linux --release --dart-define-from-file=.env
 
+      - name: Fix torrserver binary location
+        run: |
+          BUNDLE=build/linux/x64/release/bundle
+          test -x "$BUNDLE/lib/torrserver" || { echo "::error::torrserver missing from lib/ — CMake download likely failed"; exit 1; }
+          cp "$BUNDLE/lib/torrserver" "$BUNDLE/torrserver"
+          chmod +x "$BUNDLE/torrserver"
+
       - name: Package as AppImage & Tar
         run: |
           curl -fSL "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" \
@@ -245,6 +252,11 @@ jobs:
           cd build/macos/Build/Products/Release
           mv playtorrio.app PlayTorrio.app
 
+          TS="${GITHUB_WORKSPACE}/macos/Pods/torrserver_flutter/bin/torrserver"
+          test -x "$TS" || { echo "::error::torrserver binary missing from Pods — pod prepare_command download failed"; exit 1; }
+          cp "$TS" PlayTorrio.app/Contents/MacOS/torrserver
+          chmod +x PlayTorrio.app/Contents/MacOS/torrserver
+
           codesign --sign - --force --deep PlayTorrio.app
 
           mkdir -p dmg_temp
@@ -307,6 +319,11 @@ jobs:
         run: |
           cd build/macos/Build/Products/Release
           mv playtorrio.app PlayTorrio.app
+
+          TS="${GITHUB_WORKSPACE}/macos/Pods/torrserver_flutter/bin/torrserver"
+          test -x "$TS" || { echo "::error::torrserver binary missing from Pods — pod prepare_command download failed"; exit 1; }
+          cp "$TS" PlayTorrio.app/Contents/MacOS/torrserver
+          chmod +x PlayTorrio.app/Contents/MacOS/torrserver
 
           codesign --sign - --force --deep PlayTorrio.app
 
